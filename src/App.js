@@ -3,11 +3,19 @@ import './App.css';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import Home from './Home.js';
 import Logged from './logged.js';
+import { ListGroup,Button } from 'react-bootstrap';
 class App extends React.Component{
   
   constructor(props){
     super(props);
-    this.state={}
+    this.state={
+      taskEle:'',
+      task:[],
+      tpomoNum:[],
+      pomoNum:1,
+      underGoTask:'',
+      underGoPomo:1
+    }
     this.state.intervalId=''
     this.state.timerFlag=0
     this.state.brTimerFlag=0
@@ -19,7 +27,6 @@ class App extends React.Component{
       brTimerSec:30,
       brTimerMin:1,
       name:'',
-      task:[],
       timerState:false
     }
   }
@@ -30,7 +37,7 @@ class App extends React.Component{
     this.setState({
       intervalId:brefid
     })
-  }
+    }
   mountingStart=()=>{
     //checking of the flags from the base value in the set state operation
     var trFlag = this.state.timerFlag;
@@ -86,7 +93,7 @@ class App extends React.Component{
       brTimerFlag:brFlag
     })
     console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
-  }
+    }
   mountingStop=()=>{
     let strBtn = document.getElementById("startBtn");
     let stpBtn = document.getElementById('stopBtn');
@@ -143,9 +150,7 @@ class App extends React.Component{
       brTimerFlag:brFlag
     })
     console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
-}
-
-  
+    }
   startBreakTimer=()=>{  
     let timer = this.state.timer;
     let timerSec = timer.timerSec;
@@ -222,13 +227,66 @@ class App extends React.Component{
         //console.log("Timer Mis"timer.timerMin,":",timer.timerSec);
     }
   
+  displayTodo=()=>{
+    return this.state.task.map((elem,i)=><ListGroup id={"listgrp"+i}>
+      <ListGroup.Item id={"listelem"+i}><p>{elem}</p><p>{this.state.tpomoNum[i]}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
+    </ListGroup>)
+  }
+  chooseTodo=(index,item)=>{
+    console.log("it is here")
+    console.log(item,":",index);
+    this.setState({
+      underGoTask:item,
+      underGoPomo:this.state.tpomoNum[index]
+    })  
+  }
+  pomodoroTask=()=>{
+    let index = this.state.underGoPomo
+    let task = this.state.underGoTask
+    return <ListGroup id={"listgrp"+index}>
+      <ListGroup.Item id={"listelem"+index}><p>{task}</p><p>{this.state.tpomoNum[index]}</p></ListGroup.Item>
+    </ListGroup>
+  }
+  
+  setValue=(evt)=>{
+    this.setState({
+      taskEle:evt.target.value
+    })
+  }
+  addTask=()=>{
+    if(this.state.taskEle!==''){
+      let taskList = this.state.task;
+      let pNum = this.state.pomoNum;
+      let tpomoNum = this.state.tpomoNum;
+      tpomoNum.push(pNum);
+      taskList.push(this.state.taskEle);
+      this.setState({
+        task:taskList,
+        tpomoNum:tpomoNum,
+        pomoNum:1
+      })
+    }
+    else{
+      alert("Add a Task to Start the Pomodoro");
+    }
+  }
+  pomoNum=()=>{
+    let pNum = this.state.pomoNum;
+    pNum+=1;
+    this.setState({
+      pomoNum:pNum
+    })
+
+
+  }
+  
   render(){
     return(
       <div>
         <Router>
           <Switch>
             <Route path='/' exact render={(props)=><Home {...props}></Home>}></Route>
-            <Route path='/logged' render={(props)=><Logged{...props} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart}></Logged>}></Route>
+            <Route path='/logged' render={(props)=><Logged{...props} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
           </Switch>
         </Router>
       </div>
