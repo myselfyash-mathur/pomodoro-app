@@ -20,12 +20,14 @@ class App extends React.Component{
     this.state.timerFlag=0
     this.state.brTimerFlag=0
     this.state.timer = {
-      PomoSec:0,
-      PomoMin:1,
-      timerSec:0,
-      timerMin:1,
-      brTimerSec:30,
-      brTimerMin:1,
+      PomoSec:30,
+      PomoMin:0,
+      timerSec:30,
+      timerMin:0,
+      breakSec:10,
+      breakMin:0,
+      brTimerSec:10,
+      brTimerMin:0,
       name:'',
       timerState:false
     }
@@ -87,13 +89,12 @@ class App extends React.Component{
       stpElem.innerText="Skip";
       this.breakStart();
     }
-
     this.setState({
       timerFlag:trFlag,
       brTimerFlag:brFlag
     })
     console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
-    }
+  }
   mountingStop=()=>{
     let strBtn = document.getElementById("startBtn");
     let stpBtn = document.getElementById('stopBtn');
@@ -126,6 +127,7 @@ class App extends React.Component{
       this.setState({
         timer:timer
       })
+      console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
       this.breakStart();
     }
     else if((trFlag===10 || trFlag===1) && (brFlag===1 || brFlag===10)){
@@ -154,20 +156,24 @@ class App extends React.Component{
   startBreakTimer=()=>{  
     let timer = this.state.timer;
     let timerSec = timer.timerSec;
-    let timerMin =timer.timerMin;
+    let timerMin = timer.timerMin;
+    // if(timerMin===0 && timerSec===0){
+    //   timerSec = timer.brTimerSec;
+    //   timerMin = timer.brTimerMin;
+    // }
     // elem = document.getElementById("timerHeader");
         if(timerSec>=0 && timerMin>=0){
           if(timerSec>0) {timerSec-=1;}
           else if(timerMin===0 && timerSec===0){
-            timerSec = 0;
-            timerMin = 0;
+            timerSec = timer.PomoSec;
+            timerMin = timer.PomoMin;
             clearInterval(this.state.intervalId);
-            let timer = this.state.timer;
-            timer.timerSec = timer.PomoSec;
-            timer.timerMin = timer.PomoMin;
             this.setState({
-              timer:timer
+              timerFlag:1,
+              brTimerFlag:1,
+              timer:timer,
             })
+            this.mountingStop();
           }
           else {
             timerSec=59;
@@ -195,14 +201,24 @@ class App extends React.Component{
     let timer = this.state.timer;
     let timerSec = timer.timerSec;
     let timerMin = timer.timerMin;
+    // if(timerSec===0 && timerMin===0){
+    //   timerSec = timer.PomoSec
+    //   timerMin = timer.PomoMin
+    // }
     // elem = document.getElementById("timerHeader");
         if(timerSec>=0 && timerMin>=0){
           if(timerSec>0) {timerSec-=1;}
           else if(timerMin===0 && timerSec===0){
-            timerSec = 0;
-            timerMin = 0;
+            timerSec = timer.breakSec;
+            timerMin = timer.breakMin;
             clearInterval(this.state.intervalId);
             this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
+            this.setState({
+              timerFlag:10,
+              brTimerFlag:10,
+              timer:timer
+            })
+            this.mountingStart();
           }
           else {
             timerSec=59;
