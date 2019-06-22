@@ -11,7 +11,7 @@ function Pomodoro({timer,startTimer,stopTimer,displayTodo,setValue,addPomoTask,p
                     <Col md={{span:6}} > 
                         <h1 id="timerHeader">{timer.timerMin}:{timer.timerSec}</h1>
                         <Button id="startBtn" onClick={()=>startTimer()}>Start</Button>
-                        <Button id="stopBtn"  onClick={()=>stopTimer()}>Stop</Button> 
+                        <Button id="stopBtn"  onClick={()=>stopTimer()} >Stop</Button> 
                     </Col>
                     <Col md={{span:6}}>
                     <h1>Todo List</h1>
@@ -29,13 +29,11 @@ function Pomodoro({timer,startTimer,stopTimer,displayTodo,setValue,addPomoTask,p
                         <h1>Ongoing Process</h1>
                             {pomodoroTask()}
                     </Col>
-                    <Col md={{span:6,offset:6}}>
+                    <Col md={{span:6}}>
                         {displayTodo()}
                     </Col>
-                    
                 </Row>
-                <Row>
-                </Row>
+                
             </Container>
         </div>
     )

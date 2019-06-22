@@ -14,7 +14,7 @@ class App extends React.Component{
       tpomoNum:[],
       pomoNum:1,
       underGoTask:'',
-      underGoPomo:1
+      underGoPomo:''
     }
     this.state.intervalId=''
     this.state.timerFlag=0
@@ -30,7 +30,7 @@ class App extends React.Component{
       timerState:false
     }
   }
-  
+   
   breakStart=()=>{
     let brefid = setInterval(()=>this.startBreakTimer(),1000);
     console.log("Brief Id",brefid);
@@ -202,7 +202,7 @@ class App extends React.Component{
             timerSec = 0;
             timerMin = 0;
             clearInterval(this.state.intervalId);
-            //New function calling
+            this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
           }
           else {
             timerSec=59;
@@ -226,7 +226,20 @@ class App extends React.Component{
         console.log("Timer State",timer.timerState);
         //console.log("Timer Mis"timer.timerMin,":",timer.timerSec);
     }
-  
+  updatePomoNum=(pomo,task)=>{
+    let uPomoNum = pomo;
+    let list = this.state.task;
+    let plist = this.state.tpomoNum;
+    uPomoNum-=1;
+    for(let i=0;i<=list.length;i++){
+      if(task===list[i]){
+        plist[i]=uPomoNum;
+      }
+    }
+    this.setState({
+      tpomoNum:plist
+    })
+  }
   displayTodo=()=>{
     return this.state.task.map((elem,i)=><ListGroup id={"listgrp"+i}>
       <ListGroup.Item id={"listelem"+i}><p>{elem}</p><p>{this.state.tpomoNum[i]}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
@@ -239,12 +252,13 @@ class App extends React.Component{
       underGoTask:item,
       underGoPomo:this.state.tpomoNum[index]
     })  
+    
   }
   pomodoroTask=()=>{
     let index = this.state.underGoPomo
     let task = this.state.underGoTask
     return <ListGroup id={"listgrp"+index}>
-      <ListGroup.Item id={"listelem"+index}><p>{task}</p><p>{this.state.tpomoNum[index]}</p></ListGroup.Item>
+      <ListGroup.Item id={"listelem"+index}><p>{task}</p><p>{index}</p></ListGroup.Item>
     </ListGroup>
   }
   
