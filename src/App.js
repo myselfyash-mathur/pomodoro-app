@@ -1,12 +1,30 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import axios from 'axios';
+import {BrowserRouter as Router,Route,Switch,withRouter} from 'react-router-dom';
 import Home from './Home.js';
 import Logged from './logged.js';
 import { ListGroup,Button } from 'react-bootstrap';
+import * as firebase from "firebase/app";
+import "firebase/auth";
+const firebaseConfig = {
+  apiKey: "AIzaSyAThLyqMPY10NBPd2TxYlCEHG2mbfvPLPg",
+  authDomain: "pomodoroapp-aae8f.firebaseapp.com",
+  databaseURL: "https://pomodoroapp-aae8f.firebaseio.com",
+  projectId: "pomodoroapp-aae8f",
+  storageBucket: "pomodoroapp-aae8f.appspot.com",
+  messagingSenderId: "591498991208",
+  appId: "1:591498991208:web:f19082d423f67bb0"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+
+
 class App extends React.Component{
   
   constructor(props){
+    
     super(props);
     this.state={
       taskEle:'',
@@ -14,8 +32,19 @@ class App extends React.Component{
       tpomoNum:[],
       pomoNum:1,
       underGoTask:'',
-      underGoPomo:''
+      underGoPomo:'',
+      email:'',
+      name:'',
+      redirect:false
     }
+    this.state.tasks={
+      userName:'',
+      task:'',
+      email:'',
+      taskPomoNum:1,
+      taskDate:Date.now(),
+    }
+    this.state.dbtasks=[]
     this.state.intervalId=''
     this.state.timerFlag=0
     this.state.brTimerFlag=0
@@ -257,16 +286,16 @@ class App extends React.Component{
     })
   }
   displayTodo=()=>{
-    return this.state.task.map((elem,i)=><ListGroup id={"listgrp"+i}>
-      <ListGroup.Item id={"listelem"+i}><p>{elem}</p><p>{this.state.tpomoNum[i]}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
+    return this.state.dbtasks.map((elem,i)=><ListGroup id={"listgrp"+i}>
+      <ListGroup.Item id={"listelem"+i}><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
     </ListGroup>)
   }
   chooseTodo=(index,item)=>{
     console.log("it is here")
     console.log(item,":",index);
     this.setState({
-      underGoTask:item,
-      underGoPomo:this.state.tpomoNum[index]
+      underGoTask:item.taskTitle,
+      underGoPomo:item.taskPomoAsgn
     })  
     
   }
@@ -288,12 +317,25 @@ class App extends React.Component{
       let taskList = this.state.task;
       let pNum = this.state.pomoNum;
       let tpomoNum = this.state.tpomoNum;
+      let email = this.state.email
+      let userName = this.state.name;
       tpomoNum.push(pNum);
       taskList.push(this.state.taskEle);
       this.setState({
         task:taskList,
         tpomoNum:tpomoNum,
         pomoNum:1
+      })
+      let tasks = this.state.tasks
+      tasks.task=this.state.taskEle
+      tasks.taskPomoNum=pNum
+      tasks.email = email;
+      tasks.userName = userName;
+      this.setState({
+        tasks:tasks
+      })
+      axios.post('http://localhost:8080/pomoAddTasks',this.state.tasks).then((res)=>{
+        console.log(res);
       })
     }
     else{
@@ -309,19 +351,92 @@ class App extends React.Component{
 
 
   }
+  /**Login and SignUp Functions */
   
+  googleLogin=()=>{
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then((result)=> {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      console.log(user);
+      console.log('1')
+      this.setState({
+        email:user.email,
+        name:user.displayName
+      })
+      console.log(this.state.name);
+      this.props.history.push('/logged');
+      
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      console.log("err",error);
+      
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
+  componentDidMount=()=>{
+  firebase.auth().onAuthStateChanged((user)=> {
+   if (user) {
+     this.setState({
+       name:user.displayName,
+       email:user.email
+     })
+    this.props.history.push('/logged');
+   } else {
+    this.props.history.push('/');
+   }
+ });
+ let userName = this.state.tasks.userName
+ axios.get("http://localhost:8080/pomoTasks").then((res)=>{
+    this.setState({
+      dbtasks:res.data
+    })
+
+ })
+
+
+ }
+ 
+  
+  
+  
+  
+  getLogValues=()=>{
+
+  }
+  setEmaill=(evt)=>{
+    this.setState({email:evt.target.value})
+
+  }
+  setPassword=(evt)=>{
+    this.setState({pass:evt.target.value})
+  
+  }
+
+  login=()=>{
+    // let email = this.state.email;
+    // let pass = this.state.pass;
+    // axios.post('http://localhost:8080/pomoLogin').then((res)=>{
+    //       console.log(res.json);
+    // })
+  }
   render(){
     return(
       <div>
-        <Router>
-          <Switch>
-            <Route path='/' exact render={(props)=><Home {...props}></Home>}></Route>
-            <Route path='/logged' render={(props)=><Logged{...props} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
-          </Switch>
-        </Router>
+          <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }
 }
 
-export default App;
+export default withRouter(App);
