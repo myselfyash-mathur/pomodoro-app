@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {CircularProgressbar, buildStyles} from 'react-circular-progressbar';
+import {CircularProgressbar, buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import {Container,Row,Col,Button,InputGroup,FormControl} from 'react-bootstrap';
 import '../node_modules/react-bootstrap/dist/react-bootstrap.js';
@@ -21,10 +21,13 @@ function Pomodoro({timer,timerVal,startTimer,stopTimer,displayTodo,setValue,addP
                     </InputGroup>
                     </Col>
                     <Col md={{span:6}} >
-                        <CircularProgressbar value={timer.timerVal} circleRatio={1} background={true} styles={buildStyles({backgroundColor:`rgba(2,2,2)`,pathColor:`rgba(255, 255, 255, ${timer.timerVal / 100})`,textColor: '#FFFFFF', trailColor:'rgba(3,3,3)',})}text={`${timer.timerMin,":",timer.timerSec}`}></CircularProgressbar> 
-                        <h1 id="timerHeader">{timer.timerMin}:{timer.timerSec}</h1>
-                        <Button id="startBtn" onClick={()=>startTimer()}>Start</Button>
-                        <Button id="stopBtn"  onClick={()=>stopTimer()} >Stop</Button> 
+                        <div class="clockTimer"><CircularProgressbarWithChildren value={timer.timerVal} circleRatio={1} background={true} styles={buildStyles({backgroundColor:`rgba(2,2,2)`,pathColor:`rgba(255, 255, 255, ${timer.timerVal / 100})`,textColor: '#FFFFFF', trailColor:'rgba(3,3,3)'})} text={`${timer.timerMin,":",timer.timerSec}`}>
+                            <div className="barContents">
+                            <Button id="startBtn" className="innerBarContents" onClick={()=>startTimer()} value="Start">Start</Button>
+                            <Button id="stopBtn"  className="innerBarContents" onClick={()=>stopTimer()}  value="Stop">Stop</Button>
+                            </div>    
+                        </CircularProgressbarWithChildren>
+                        </div> 
                     </Col>
                     
                 </Row>

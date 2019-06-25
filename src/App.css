@@ -9,3 +9,86 @@
 .loggedNavHeader{
   background-color:#20232A !important;
 }
+@media only screen and (min-width:1024px) and (max-width:1324px){
+.clockTimer{
+  width:20vw;
+}
+.CircularProgressbarWithChildren {
+  width:14 !important;
+}
+.barContents{
+  width:13vw;
+  margin-left:20px;
+  height:14vh;
+}
+.innerBarContents{
+  padding-right:28%;
+  margin-top: 100%;
+  margin-left:9%;
+  background-color: antiquewhite !important;
+  color:black !important;
+}
+.innerBarContents:hover{
+  border-color:black;
+}
+.innerBarContents:active{
+  border-color:black;
+}
+}
+
+@media only screen and (min-width:1324px) and (max-width:1624px){
+  .clockTimer{
+    width:20vw;
+  }
+  .CircularProgressbarWithChildren {
+    width:14 !important;
+  }
+  .barContents{
+    width:10vw;
+    margin-left:40px;
+    height:23vh;
+  }
+  .innerBarContents{
+    padding-right:28%;
+    margin-top: 100%;
+    margin-left:9%;
+    background-color: antiquewhite !important;
+    color:black !important;
+  }
+  .innerBarContents:hover{
+    border-color:black;
+  }
+  .innerBarContents:active{
+    border-color:black;
+  }
+  }
+  
+
+@media only screen and (min-width:324px) and (max-width:730px){
+  .clockTimer{
+    width:45vw;
+  }
+  .CircularProgressbarWithChildren {
+    width:14 !important;
+  }
+  .barContents{
+    width: 30vw;
+    padding: 1.5vw;
+    height: 150px;
+    margin-bottom:10vw;
+    display: inherit;
+  }
+  .innerBarContents{
+    padding-right:30%;
+    margin-top: 100%;
+    margin-left:9%;
+    background-color: antiquewhite !important;
+    color:black !important;
+  }
+  .innerBarContents:hover{
+    border-color:black;
+  }
+  .innerBarContents:active{
+    border-color:black;
+  }
+  }
