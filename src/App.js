@@ -62,6 +62,7 @@ class App extends React.Component{
       brTimerSec:10,
       brTimerMin:0,
       name:'',
+      timerVal:0,
       timerState:false
     }
   }
@@ -218,6 +219,7 @@ class App extends React.Component{
           this.setState({
           timer:timer
           })
+          this.timerProgress();
      
         }
         else {
@@ -264,6 +266,8 @@ class App extends React.Component{
              this.setState({
           timer:timer
           })
+          this.timerProgress();
+    
      
         }
         else {
@@ -291,7 +295,7 @@ class App extends React.Component{
         })
       }
     }
-    this.deleteCompTasks();
+
   // this.setState({
     //   tpomoNum:plist
     // })
@@ -450,7 +454,7 @@ componentDidMount=()=>{
    }
  });
  console.log(this.state.name);
-  }
+}
    getUserDetails(){
     let UId = this.state.dbUsers._id;
    this.setState({
@@ -470,12 +474,11 @@ componentDidMount=()=>{
     for(let i=0;i<localtasks.length;i++){
 
         if(localtasks[i].taskPomoAsgn<=0){
-          
-          axios.delete('http://localhost:8080/deleteCompTasks',localtasks[i]).then((res)=>{
+          console.log(localtasks[i])
+          let delTask = localtasks[i];
+          axios.delete('http://localhost:8080/deleteCompTasks',delTask).then((res)=>{
             console.log(res)
           })
-          setTimeout(()=>{return localtasks.splice[i,1];},2000)
-          
           console.log(localtasks[i]);
           // this.setState({
           //   dbtasks:localtasks,
@@ -484,6 +487,53 @@ componentDidMount=()=>{
         }
         
     }
+  }
+
+  timerProgress=()=>{
+    if(this.state.timer.timerState ===false){
+      let min = this.state.timer.timerMin;
+      let sec = this.state.timer.timerSec;
+      let rsec = (min*60+sec)
+      console.log("Reamining",rsec);
+      let pmin = this.state.timer.PomoMin;
+      let psec = this.state.timer.PomoSec;
+      let tsec = (pmin*60+psec);
+      console.log("Total",tsec)
+      let timerVal = (rsec/tsec)*100;
+      let timer = this.state.timer;
+      timer.timerVal = timerVal;
+      if(timer.timerVal===0){
+        timer.timerState=true;
+      }
+      this.setState({
+        timer:timer
+      })
+      console.log("TimerValue",this.state.timer.timerVal);
+      console.log()
+    }
+    else{
+      let min = this.state.timer.timerMin;
+      let sec = this.state.timer.timerSec;
+      let rsec = (min*60+sec)
+      console.log("Reamining",rsec);
+      let bMin = this.state.timer.brTimerMin;
+      let bSec = this.state.timer.brTimerSec;
+      let tsec = (bMin*60+bSec);
+      console.log("Total",tsec);
+      let timerVal = (rsec/tsec)*100;
+      let timer = this.state.timer;
+      timer.timerVal = timerVal;
+      if(timer.timerVal===0){
+        timer.timerState=false;
+
+      }
+      this.setState({
+        timer:timer
+      })
+      console.log("TimerValue",this.state.timer.timerVal);
+      
+    }
+
   }
 
   login=()=>{
@@ -497,7 +547,7 @@ componentDidMount=()=>{
     return(
       <div>
           <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
-          <Route path='/logged' render={(props)=><Logged {...props} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }

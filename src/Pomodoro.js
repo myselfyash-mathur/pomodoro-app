@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
+import {CircularProgressbar, buildStyles} from 'react-circular-progressbar';
+import "react-circular-progressbar/dist/styles.css";
 import {Container,Row,Col,Button,InputGroup,FormControl} from 'react-bootstrap';
 import '../node_modules/react-bootstrap/dist/react-bootstrap.js';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
-function Pomodoro({timer,startTimer,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
+function Pomodoro({timer,timerVal,startTimer,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
     return (
         <div>
             <Container>
@@ -18,7 +20,8 @@ function Pomodoro({timer,startTimer,stopTimer,displayTodo,setValue,addPomoTask,p
                             </InputGroup.Append>
                     </InputGroup>
                     </Col>
-                    <Col md={{span:6}} > 
+                    <Col md={{span:6}} >
+                        <CircularProgressbar value={timer.timerVal} circleRatio={1} background={true} styles={buildStyles({backgroundColor:`rgba(2,2,2)`,pathColor:`rgba(255, 255, 255, ${timer.timerVal / 100})`,textColor: '#FFFFFF', trailColor:'rgba(3,3,3)',})}text={`${timer.timerMin,":",timer.timerSec}`}></CircularProgressbar> 
                         <h1 id="timerHeader">{timer.timerMin}:{timer.timerSec}</h1>
                         <Button id="startBtn" onClick={()=>startTimer()}>Start</Button>
                         <Button id="stopBtn"  onClick={()=>stopTimer()} >Stop</Button> 
