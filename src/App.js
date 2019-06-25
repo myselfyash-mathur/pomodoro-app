@@ -35,15 +35,19 @@ class App extends React.Component{
       underGoPomo:'',
       email:'',
       name:'',
+      UId:'',
       redirect:false
     }
+    this.state.dbUsers=[]
     this.state.tasks={
       userName:'',
       task:'',
       email:'',
       taskPomoNum:1,
       taskDate:Date.now(),
+      UId:''
     }
+    this.state.localtasks=[]
     this.state.dbtasks=[]
     this.state.intervalId=''
     this.state.timerFlag=0
@@ -272,6 +276,13 @@ class App extends React.Component{
         //console.log("Timer Mis"timer.timerMin,":",timer.timerSec);
     }
   updatePomoNum=(pomo,task)=>{
+    let taskId = this.state.dbtasks._id;
+    let tasks = this.state.dbtasks;
+    axios.put("http://localhost:8080/updatePomo/"+taskId,tasks).then((res)=>{
+      this.setState({
+        dbtasks:res.data
+      })
+    })
     let uPomoNum = pomo;
     let list = this.state.task;
     let plist = this.state.tpomoNum;
@@ -286,7 +297,7 @@ class App extends React.Component{
     })
   }
   displayTodo=()=>{
-    return this.state.dbtasks.map((elem,i)=><ListGroup id={"listgrp"+i}>
+    return this.state.localtasks.map((elem,i)=><ListGroup id={"listgrp"+i}>
       <ListGroup.Item id={"listelem"+i}><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
     </ListGroup>)
   }
@@ -331,9 +342,17 @@ class App extends React.Component{
       tasks.taskPomoNum=pNum
       tasks.email = email;
       tasks.userName = userName;
+      tasks.UId = this.state.UId
       this.setState({
         tasks:tasks
       })
+      let localarr = {'taskTitle':this.state.taskEle,'taskDate':this.state.tasks.taskDate,'taskPomoAsgn':pNum};
+      let localtasks = this.state.localtasks
+      localtasks.push(localarr)
+      this.setState({
+        localtasks:localtasks
+      })
+      console.log(this.state.tasks);
       axios.post('http://localhost:8080/pomoAddTasks',this.state.tasks).then((res)=>{
         console.log(res);
       })
@@ -383,35 +402,39 @@ class App extends React.Component{
       // ...
     });
   }
-  componentDidMount=()=>{
+componentDidMount=()=>{
   firebase.auth().onAuthStateChanged((user)=> {
    if (user) {
+     console.log(user);
      this.setState({
        name:user.displayName,
-       email:user.email
+       email:user.email,
+       UId:user.uid
      })
+    let details={'name':this.state.name,'email':this.state.email,'UId':this.state.UId}
+    axios.post("http://localhost:8080/pomoLogin",details).then((res)=>{
+      this.setState({
+        dbUsers:res.data
+      })
+    })
+      axios.post("http://localhost:8080/pomoTasks",details).then((res)=>{
+      this.setState({
+        dbtasks:res.data,
+        localtasks:res.data
+      })
+    })
     this.props.history.push('/logged');
    } else {
     this.props.history.push('/');
    }
  });
- let userName = this.state.tasks.userName
- axios.get("http://localhost:8080/pomoTasks").then((res)=>{
-    this.setState({
-      dbtasks:res.data
+ console.log(this.state.name);
+  }
+   getUserDetails(){
+    let UId = this.state.dbUsers._id;
+   this.setState({
+      UId:UId
     })
-
- })
-
-
- }
- 
-  
-  
-  
-  
-  getLogValues=()=>{
-
   }
   setEmaill=(evt)=>{
     this.setState({email:evt.target.value})
