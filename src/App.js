@@ -348,10 +348,18 @@ class App extends React.Component{
       })
       let localarr = {'taskTitle':this.state.taskEle,'taskDate':this.state.tasks.taskDate,'taskPomoAsgn':pNum};
       let localtasks = this.state.localtasks
-      localtasks.push(localarr)
-      this.setState({
-        localtasks:localtasks
-      })
+      for(let i=0;i<localtasks.length;i++){
+        if(localtasks[i].taskTitle===localarr.taskTitle){
+          alert('Task Already Exist in your Pomodoro, If can continue that or delete and add new')
+          break;
+        }
+        else{
+          localtasks.push(localarr)
+          this.setState({
+            localtasks:localtasks
+          })
+        }
+      }
       console.log(this.state.tasks);
       axios.post('http://localhost:8080/pomoAddTasks',this.state.tasks).then((res)=>{
         console.log(res);
