@@ -161,6 +161,7 @@ class App extends React.Component{
         timer:timer
       })
       console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
+      this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
       this.breakStart();
     }
     else if((trFlag===10 || trFlag===1) && (brFlag===1 || brFlag===10)){
@@ -245,6 +246,7 @@ class App extends React.Component{
             timerSec = timer.breakSec;
             timerMin = timer.breakMin;
             clearInterval(this.state.intervalId);
+            console.log("Here is your tasks which will update",this.state.underGoTask,":",this.state.underGoPomo)
             this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
             this.setState({
               timerFlag:10,
@@ -276,25 +278,23 @@ class App extends React.Component{
         //console.log("Timer Mis"timer.timerMin,":",timer.timerSec);
     }
   updatePomoNum=(pomo,task)=>{
-    let taskId = this.state.dbtasks._id;
-    let tasks = this.state.dbtasks;
-    axios.put("http://localhost:8080/updatePomo/"+taskId,tasks).then((res)=>{
-      this.setState({
-        dbtasks:res.data
-      })
-    })
-    let uPomoNum = pomo;
-    let list = this.state.task;
-    let plist = this.state.tpomoNum;
-    uPomoNum-=1;
-    for(let i=0;i<=list.length;i++){
-      if(task===list[i]){
-        plist[i]=uPomoNum;
+    console.log("This is the selected task",task,pomo);
+    let tasks = this.state.localtasks;
+    for(let i=0;i<tasks.length;i++){
+      if(tasks[i].taskTitle===task){
+        tasks[i].taskPomoAsgn-=1
+        axios.put("http://localhost:8080/updatePomo",tasks[i]).then((res)=>{
+          this.setState({
+            localtasks:res.data,
+            underGoPomo:res.data.taskPomoAsgn
+          })
+        })
       }
     }
-    this.setState({
-      tpomoNum:plist
-    })
+    this.deleteCompTasks();
+  // this.setState({
+    //   tpomoNum:plist
+    // })
   }
   displayTodo=()=>{
     return this.state.localtasks.map((elem,i)=><ListGroup id={"listgrp"+i}>
@@ -303,12 +303,12 @@ class App extends React.Component{
   }
   chooseTodo=(index,item)=>{
     console.log("it is here")
-    console.log(item,":",index);
+    console.log(item.taskTitle,":",item.taskPomoAsgn);
     this.setState({
       underGoTask:item.taskTitle,
       underGoPomo:item.taskPomoAsgn
     })  
-    
+    console.log("This is the chosen task",this.state.underGoTask,"with",this.state.underGoPomo)
   }
   pomodoroTask=()=>{
     let index = this.state.underGoPomo
@@ -348,18 +348,25 @@ class App extends React.Component{
       })
       let localarr = {'taskTitle':this.state.taskEle,'taskDate':this.state.tasks.taskDate,'taskPomoAsgn':pNum};
       let localtasks = this.state.localtasks
+      let fl=0;
       for(let i=0;i<localtasks.length;i++){
         if(localtasks[i].taskTitle===localarr.taskTitle){
-          alert('Task Already Exist in your Pomodoro, If can continue that or delete and add new')
+          fl=1;
           break;
         }
         else{
-          localtasks.push(localarr)
+          fl=0;
+        }
+      }
+      if(fl===0){
+      localtasks.push(localarr)
           this.setState({
             localtasks:localtasks
           })
         }
-      }
+        else{
+          alert("This task is already present in your ToDoList, you can complete that or delete and start new");
+        }
       console.log(this.state.tasks);
       axios.post('http://localhost:8080/pomoAddTasks',this.state.tasks).then((res)=>{
         console.log(res);
@@ -419,17 +426,23 @@ componentDidMount=()=>{
        email:user.email,
        UId:user.uid
      })
+     console.log(user.email,this.state.email);
+     console.log(user.displayName,this.state.name);
+     console.log(user.uid,this.state.UId)
     let details={'name':this.state.name,'email':this.state.email,'UId':this.state.UId}
     axios.post("http://localhost:8080/pomoLogin",details).then((res)=>{
       this.setState({
         dbUsers:res.data
       })
+      console.log(res.data);
     })
+    console.log(details);
       axios.post("http://localhost:8080/pomoTasks",details).then((res)=>{
       this.setState({
         dbtasks:res.data,
         localtasks:res.data
       })
+      console.log(res.data)
     })
     this.props.history.push('/logged');
    } else {
@@ -451,6 +464,26 @@ componentDidMount=()=>{
   setPassword=(evt)=>{
     this.setState({pass:evt.target.value})
   
+  }
+  deleteCompTasks=()=>{
+    let localtasks = this.state.localtasks;
+    for(let i=0;i<localtasks.length;i++){
+
+        if(localtasks[i].taskPomoAsgn<=0){
+          
+          axios.delete('http://localhost:8080/deleteCompTasks',localtasks[i]).then((res)=>{
+            console.log(res)
+          })
+          setTimeout(()=>{return localtasks.splice[i,1];},2000)
+          
+          console.log(localtasks[i]);
+          // this.setState({
+          //   dbtasks:localtasks,
+          //   localtasks:localtasks
+          // }) 
+        }
+        
+    }
   }
 
   login=()=>{
