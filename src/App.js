@@ -7,6 +7,7 @@ import Logged from './logged.js';
 import { ListGroup,Button } from 'react-bootstrap';
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import bellSound from './bellRing.mp3';
 const firebaseConfig = {
   apiKey: "AIzaSyAThLyqMPY10NBPd2TxYlCEHG2mbfvPLPg",
   authDomain: "pomodoroapp-aae8f.firebaseapp.com",
@@ -57,14 +58,14 @@ class App extends React.Component{
     this.state.timerFlag=0
     this.state.brTimerFlag=0
     this.state.timer = {
-      PomoSec:30,
-      PomoMin:0,
-      timerSec:30,
-      timerMin:0,
-      breakSec:10,
-      breakMin:0,
-      brTimerSec:10,
-      brTimerMin:0,
+      PomoSec:0,
+      PomoMin:25,
+      timerSec:0,
+      timerMin:25,
+      breakSec:0,
+      breakMin:5,
+      brTimerSec:0,
+      brTimerMin:5,
       name:'',
       timerVal:0,
       timerState:false
@@ -318,6 +319,7 @@ class App extends React.Component{
         this.setState({
           underGoPomo:tasks[i].taskPomoAsgn
         })
+        this.playAudio();
       }
     }
 
@@ -588,6 +590,11 @@ class App extends React.Component{
     // axios.post('http://localhost:8080/pomoLogin').then((res)=>{
     //       console.log(res.json);
     // })
+  }
+  playAudio=()=>{
+    let audio = new Audio({bellSound});
+    console.log("Bell Rang");
+    audio.play();
   }
   render(){
     return(

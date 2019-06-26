@@ -22,7 +22,7 @@ function Pomodoro({timer,timerVal,isSnackbarActive,handleTimeoutSnackbar,startTi
                     </InputGroup>
                     </Col>
                     <Col md={{span:6}} sm={{span:12}} >
-                        <div class="clockTimer"><CircularProgressbarWithChildren value={timer.timerVal} circleRatio={1} background={true} styles={buildStyles({backgroundColor:`rgba(2,2,2)`,pathColor:`rgba(255, 255, 255, ${timer.timerVal / 100})`,textColor: '#FFFFFF', trailColor:'rgba(3,3,3)'})} text={`${timer.timerMin,":",timer.timerSec}`}>
+                        <div class="clockTimer"><CircularProgressbarWithChildren value={timer.timerVal} circleRatio={1} background={true} styles={buildStyles({backgroundColor:`rgba(2,2,2)`,pathColor:`rgba(255, 255, 255, ${timer.timerVal / 100})`,textColor: '#FFFFFF', trailColor:'rgba(3,3,3)'})} text={`${timer.timerMin}:${timer.timerSec}`}>
                             <div className="barContents">
                             <Button id="startBtn" className="innerBarContents" onClick={()=>startTimer()} value="Start">Start</Button>
                             <Button id="stopBtn"  className="innerBarContents" onClick={()=>stopTimer()}  value="Stop">Stop</Button>
