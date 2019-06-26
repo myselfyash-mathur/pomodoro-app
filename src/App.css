@@ -17,6 +17,7 @@
 @media only screen and (min-width:1024px) and (max-width:1324px){
 .clockTimer{
   width:20vw;
+  margin-inline-start: 29vw;
 }
 
 .CircularProgressbarWithChildren {
@@ -52,6 +53,7 @@
 @media only screen and (min-width:1324px) and (max-width:1624px){
   .clockTimer{
     width:20vw;
+    margin-inline-start: 29vw;
   }
   
   .barContents{
@@ -78,6 +80,7 @@
 @media only screen and (min-width:324px) and (max-width:730px){
   .clockTimer{
     width:45vw;
+    margin-inline-start: 20vw;
   }
   .CircularProgressbarWithChildren {
     width:14 !important;
