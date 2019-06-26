@@ -9,10 +9,16 @@
 .loggedNavHeader{
   background-color:#20232A !important;
 }
+.profPicture{
+  width:10%;
+  border-radius: 10px;
+}
+
 @media only screen and (min-width:1024px) and (max-width:1324px){
 .clockTimer{
   width:20vw;
 }
+
 .CircularProgressbarWithChildren {
   width:14 !important;
 }
@@ -34,24 +40,29 @@
 .innerBarContents:active{
   border-color:black;
 }
-}
 
+}
+@media only screen and (min-width:1024px) and (max-width:1624px){
+
+  .profPicture{
+    width:5%;
+    border-radius: 10px;
+  }
+}
 @media only screen and (min-width:1324px) and (max-width:1624px){
   .clockTimer{
     width:20vw;
   }
-  .CircularProgressbarWithChildren {
-    width:14 !important;
-  }
+  
   .barContents{
     width:10vw;
-    margin-left:40px;
+    margin-left:20px;
     height:23vh;
   }
   .innerBarContents{
     padding-right:28%;
     margin-top: 100%;
-    margin-left:9%;
+    margin-left:5%;
     background-color: antiquewhite !important;
     color:black !important;
   }

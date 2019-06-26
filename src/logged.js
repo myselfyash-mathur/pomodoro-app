@@ -8,7 +8,7 @@ import {Layout,Header,Navigation,Drawer,Content,Footer,FooterSection,FooterLinkL
 import {BrowserRouter as Router,Route,Switch,Link} from 'react-router-dom';
 import '../node_modules/react-mdl/extra/material.js';
 import '../node_modules/react-mdl/extra/css/material.css';
-function Logged({userName,checkLogin,timer,startTimer,logout,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
+function Logged({userName,checkLogin,profURL,timer,startTimer,logout,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
     return(
         
         <div className="demo-big-content">
@@ -16,6 +16,7 @@ function Logged({userName,checkLogin,timer,startTimer,logout,stopTimer,displayTo
         <Router>
             <Layout fixedDrawer={true} fixedHeader={true}>
                 <Header title="Pomodorer's Point" scroll className='loggedNavHeader'>
+                        <img className="profPicture" src={profURL} alt="UserProfPicture"></img>
                         <Button variant="danger" onClick={()=>logout()}>{userName}</Button>
                 </Header>
                 <Drawer title="Pomodorer's Point">

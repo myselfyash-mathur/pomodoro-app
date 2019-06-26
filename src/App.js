@@ -36,6 +36,7 @@ class App extends React.Component{
       email:'',
       name:'',
       UId:'',
+      profURL:'',
       redirect:false
     }
     this.state.dbUsers=[]
@@ -431,7 +432,8 @@ componentDidMount=()=>{
      this.setState({
        name:user.displayName,
        email:user.email,
-       UId:user.uid
+       UId:user.uid,
+       profURL:user.photoURL
      })
      console.log(user.email,this.state.email);
      console.log(user.displayName,this.state.name);
@@ -560,7 +562,7 @@ componentDidMount=()=>{
     return(
       <div>
           <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
-          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} profURL={this.state.profURL} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }
