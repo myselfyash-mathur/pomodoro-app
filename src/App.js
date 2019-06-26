@@ -175,6 +175,12 @@ class App extends React.Component{
       console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
       this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
       this.deleteCompTasks();
+      if(this.state.underGoPomo===0){
+        this.setState({
+          underGoPomo:'',
+          underGoTask:''
+        })
+      }
       this.breakStart();
     }
     else if((trFlag===10 || trFlag===1) && (brFlag===1 || brFlag===10)){
@@ -310,13 +316,6 @@ class App extends React.Component{
         this.setState({
           underGoPomo:tasks[i].taskPomoAsgn
         })
-        if(this.state.underGoPomo<=0){
-          this.setState({
-            underGoPomo:'',
-            underGoTask:''
-          })
-        }
-        
       }
     }
 
@@ -471,6 +470,7 @@ class App extends React.Component{
         dbtasks:res.data,
         localtasks:res.data
       })
+      
       console.log(res.data)
     })
     this.props.history.push('/logged');
@@ -510,17 +510,12 @@ class App extends React.Component{
             dbtasks:localtasks,
             localtasks:localtasks
           }) 
-          if(this.state.underGoPomo<=0){
-            this.setState({
-              underGoPomo:'',
-              underGoTask:''
-            })
-          }
+          console.log(this.state.dbtasks);
           this.handleShowSnackbar();
         }
         
     }
-  }
+}
 
   timerProgress=()=>{
     if(this.state.timer.timerState ===false){
