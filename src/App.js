@@ -36,6 +36,7 @@ class App extends React.Component{
       underGoTask:'',
       underGoPomo:'',
       underGoId:'',
+      underGoState:false,
       email:'',
       name:'',
       UId:'',
@@ -43,6 +44,7 @@ class App extends React.Component{
       counter:0,
       redirect:false
     }
+    this.state.lgUser={}
     this.state.dbUsers=[]
     this.state.tasks={
       userName:'',
@@ -317,7 +319,8 @@ class App extends React.Component{
           })
         })
         this.setState({
-          underGoPomo:tasks[i].taskPomoAsgn
+          underGoPomo:tasks[i].taskPomoAsgn,
+          underGoState:false
         })
         this.playAudio();
       }
@@ -328,8 +331,8 @@ class App extends React.Component{
     // })
   }
   displayTodo=()=>{
-    return this.state.localtasks.map((elem)=><ListGroup id={"listgrp"+elem._id}>
-      <ListGroup.Item id={"listelem"+elem._id} className="toDoList"><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(elem)}}>Start</Button></ListGroup.Item>
+    return this.state.localtasks.map((elem)=><ListGroup id={"listgrp"+elem._id} className={this.state.underGoState?'pomoList':'todoList'}>
+      <ListGroup.Item id={"listelem"+elem._id} className="toDoList"><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(elem)}}>Pick Task</Button></ListGroup.Item>
     </ListGroup>)
   }
   chooseTodo=(item)=>{
@@ -338,8 +341,21 @@ class App extends React.Component{
     this.setState({
       underGoTask:item.taskTitle,
       underGoPomo:item.taskPomoAsgn,
-      underGoId:item._id
-    })  
+      underGoId:item._id,
+      underGoState:true
+    })
+    console.log(this.state.underGoState)
+    if(this.state.underGoState){
+      console.log(item._id);
+      var elem = document.getElementById("listgrp"+item._id);
+      console.log(elem);
+      // elem.classList.remove("toDoList");
+      // void elem.offsetWidth;
+      elem.className='pomoList';
+    }
+    else{
+      console.log("Nothing")
+    }  
     console.log("This is the chosen task",this.state.underGoTask,"with",this.state.underGoPomo)
   }
   pomodoroTask=()=>{
@@ -468,7 +484,7 @@ class App extends React.Component{
      console.log(user.email,this.state.email);
      console.log(user.displayName,this.state.name);
      console.log(user.uid,this.state.UId)
-    let details={'name':this.state.name,'email':this.state.email,'UId':this.state.UId}
+    let details={'name':this.state.name,'email':this.state.email,'UId':this.state.UId,'profURL':this.state.profURL}
     axios.post("http://localhost:8080/pomoLogin",details).then((res)=>{
       this.setState({
         dbUsers:res.data
@@ -476,6 +492,10 @@ class App extends React.Component{
       console.log(res.data);
     })
     console.log(details);
+    this.setState({
+      lgUser:details
+    })
+    console.log(this.state.lgUser)
       axios.post("http://localhost:8080/pomoTasks",details).then((res)=>{
       this.setState({
         dbtasks:res.data,
@@ -600,7 +620,7 @@ class App extends React.Component{
     return(
       <div>
           <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
-          <Route path='/logged' render={(props)=><Logged {...props} handleTimeoutSnackbar={this.handleTimeoutSnackbar} isSnackbarActive={this.state.isSnackbarActive} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} profURL={this.state.profURL} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} lgUser={this.state.lgUser} handleTimeoutSnackbar={this.handleTimeoutSnackbar} isSnackbarActive={this.state.isSnackbarActive} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} profURL={this.state.profURL} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }
