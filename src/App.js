@@ -27,6 +27,7 @@ class App extends React.Component{
     
     super(props);
     this.state={
+      isSnackbarActive:false,
       taskEle:'',
       task:[],
       tpomoNum:[],
@@ -68,6 +69,14 @@ class App extends React.Component{
     }
   }
    
+  handleShowSnackbar=()=>{
+    this.setState({
+      isSnackbarActive: true,
+    });
+  }
+  handleTimeoutSnackbar=()=> {
+    this.setState({ isSnackbarActive: false });
+  }
   breakStart=()=>{
     let brefid = setInterval(()=>this.startBreakTimer(),1000);
     console.log("Brief Id",brefid);
@@ -165,6 +174,7 @@ class App extends React.Component{
       })
       console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
       this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
+      this.deleteCompTasks();
       this.breakStart();
     }
     else if((trFlag===10 || trFlag===1) && (brFlag===1 || brFlag===10)){
@@ -297,6 +307,16 @@ class App extends React.Component{
             underGoPomo:res.data.taskPomoAsgn
           })
         })
+        this.setState({
+          underGoPomo:tasks[i].taskPomoAsgn
+        })
+        if(this.state.underGoPomo<=0){
+          this.setState({
+            underGoPomo:'',
+            underGoTask:''
+          })
+        }
+        
       }
     }
 
@@ -425,7 +445,7 @@ class App extends React.Component{
       // ...
     });
   }
-componentDidMount=()=>{
+  componentDidMount=()=>{
   firebase.auth().onAuthStateChanged((user)=> {
    if (user) {
      console.log(user);
@@ -490,6 +510,13 @@ componentDidMount=()=>{
             dbtasks:localtasks,
             localtasks:localtasks
           }) 
+          if(this.state.underGoPomo<=0){
+            this.setState({
+              underGoPomo:'',
+              underGoTask:''
+            })
+          }
+          this.handleShowSnackbar();
         }
         
     }
@@ -562,7 +589,7 @@ componentDidMount=()=>{
     return(
       <div>
           <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
-          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} profURL={this.state.profURL} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} handleTimeoutSnackbar={this.handleTimeoutSnackbar} isSnackbarActive={this.state.isSnackbarActive} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} profURL={this.state.profURL} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }

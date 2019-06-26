@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
+import {Snackbar} from 'react-mdl';
 import {CircularProgressbar, buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import {Container,Row,Col,Button,InputGroup,FormControl} from 'react-bootstrap';
 import '../node_modules/react-bootstrap/dist/react-bootstrap.js';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
-function Pomodoro({timer,timerVal,startTimer,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
+function Pomodoro({timer,timerVal,isSnackbarActive,handleTimeoutSnackbar,startTimer,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
     return (
         <div>
             <Container>
@@ -41,7 +42,7 @@ function Pomodoro({timer,timerVal,startTimer,stopTimer,displayTodo,setValue,addP
                     </Col>
                     
                 </Row>
-                
+                <Snackbar active={isSnackbarActive} onTimeout={handleTimeoutSnackbar}>You Have Completed your Pomodoro Task,Keep Going!!</Snackbar>
             </Container>
         </div>
     )

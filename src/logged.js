@@ -8,7 +8,7 @@ import {Layout,Header,Navigation,Drawer,Content,Footer,FooterSection,FooterLinkL
 import {BrowserRouter as Router,Route,Switch,Link} from 'react-router-dom';
 import '../node_modules/react-mdl/extra/material.js';
 import '../node_modules/react-mdl/extra/css/material.css';
-function Logged({userName,checkLogin,profURL,timer,startTimer,logout,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
+function Logged({userName,checkLogin,profURL,timer,startTimer,isSnackbarActive,handleTimeoutSnackbar,logout,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
     return(
         
         <div className="demo-big-content">
@@ -29,7 +29,7 @@ function Logged({userName,checkLogin,profURL,timer,startTimer,logout,stopTimer,d
                 <Content className="page-content">
                     <Switch>
                         <Route path='/logged' exact component ={Dashboard}></Route>
-                        <Route path='/logged/pomodoro' render={props=><Pomodoro {...props} pNum={pNum} pomodoroTask={pomodoroTask} displayTodo={displayTodo} setValue={setValue} addPomoTask={addPomoTask} pomoNum={pomoNum} timer={timer} stopTimer={stopTimer} startTimer={startTimer}></Pomodoro>}></Route>
+                        <Route path='/logged/pomodoro' render={props=><Pomodoro {...props} pNum={pNum} isSnackbarActive={isSnackbarActive} handleTimeoutSnackbar={handleTimeoutSnackbar} pomodoroTask={pomodoroTask} displayTodo={displayTodo} setValue={setValue} addPomoTask={addPomoTask} pomoNum={pomoNum} timer={timer} stopTimer={stopTimer} startTimer={startTimer}></Pomodoro>}></Route>
                         <Route path='/logged/about' component ={About}></Route>
                     </Switch>
                 </Content>
