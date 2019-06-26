@@ -79,9 +79,9 @@
     display: inherit;
   }
   .innerBarContents{
-    padding-right:30%;
+    padding-right:10%;
     margin-top: 100%;
-    margin-left:9%;
+    margin-left:1%;
     background-color: antiquewhite !important;
     color:black !important;
   }

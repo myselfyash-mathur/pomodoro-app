@@ -3,11 +3,12 @@ import './App.css';
 import Dashboard from './Dashboard.js';
 import About from './About.js';
 import Pomodoro from './Pomodoro.js';
+import {Button} from 'react-bootstrap';
 import {Layout,Header,Navigation,Drawer,Content,Footer,FooterSection,FooterLinkList} from 'react-mdl';
 import {BrowserRouter as Router,Route,Switch,Link} from 'react-router-dom';
 import '../node_modules/react-mdl/extra/material.js';
 import '../node_modules/react-mdl/extra/css/material.css';
-function Logged({userName,checkLogin,timer,startTimer,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
+function Logged({userName,checkLogin,timer,startTimer,logout,stopTimer,displayTodo,setValue,addPomoTask,pomoNum,pNum,pomodoroTask}){
     return(
         
         <div className="demo-big-content">
@@ -15,9 +16,7 @@ function Logged({userName,checkLogin,timer,startTimer,stopTimer,displayTodo,setV
         <Router>
             <Layout fixedDrawer={true} fixedHeader={true}>
                 <Header title="Pomodorer's Point" scroll className='loggedNavHeader'>
-                    <Navigation>
-                        <Link to='/about'>{userName}</Link>
-                    </Navigation>
+                        <Button variant="danger" onClick={()=>logout()}>{userName}</Button>
                 </Header>
                 <Drawer title="Pomodorer's Point">
                     <Navigation>

@@ -536,6 +536,15 @@ componentDidMount=()=>{
 
   }
 
+  logout(){
+    firebase.auth().signOut().then(()=>{
+      console.log('Logged out');
+      this.props.history.push('/');
+    }).catch(function(error) {
+    // An error happened.
+    });
+}
+
   login=()=>{
     // let email = this.state.email;
     // let pass = this.state.pass;
@@ -547,7 +556,7 @@ componentDidMount=()=>{
     return(
       <div>
           <Route path='/' exact render={(props)=><Home {...props} googleLogin={this.googleLogin} setEmail={this.setEmaill} setPassword={this.setPassword}></Home>}></Route>
-          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
+          <Route path='/logged' render={(props)=><Logged {...props} timerVal = {this.state.timer.timerVal} logout={this.logout} checkLogin={this.checkLogin} userName={this.state.name} pNum={this.state.pomoNum} pomodoroTask={this.pomodoroTask} displayTodo={this.displayTodo} timer={this.state.timer} stopTimer={this.mountingStop} startTimer ={this.mountingStart} chooseTodo={this.chooseTodo} setValue={this.setValue} addPomoTask={this.addTask} pomoNum={this.pomoNum} ></Logged>}></Route>
       </div>
     )
   }
