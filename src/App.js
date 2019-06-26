@@ -127,6 +127,7 @@ class App extends React.Component{
       timerFlag:trFlag,
       brTimerFlag:brFlag
     })
+    this.timerProgress();
     console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
   }
   mountingStop=()=>{
@@ -186,6 +187,7 @@ class App extends React.Component{
       timerFlag:trFlag,
       brTimerFlag:brFlag
     })
+    this.timerProgress();
     console.log("Final Flags, Timer:",this.state.timerFlag,"Break:",this.state.brTimerFlag);
     }
   startBreakTimer=()=>{  
@@ -250,6 +252,7 @@ class App extends React.Component{
             clearInterval(this.state.intervalId);
             console.log("Here is your tasks which will update",this.state.underGoTask,":",this.state.underGoPomo)
             this.updatePomoNum(this.state.underGoPomo,this.state.underGoTask);
+            this.deleteCompTasks();
             this.setState({
               timerFlag:10,
               brTimerFlag:10,
@@ -476,14 +479,15 @@ componentDidMount=()=>{
         if(localtasks[i].taskPomoAsgn<=0){
           console.log(localtasks[i])
           let delTask = localtasks[i];
-          axios.delete('http://localhost:8080/deleteCompTasks',delTask).then((res)=>{
+          console.log(delTask);
+          axios.delete('http://localhost:8080/deleteCompTasks/'+delTask.taskTitle).then((res)=>{
             console.log(res)
           })
-          console.log(localtasks[i]);
-          // this.setState({
-          //   dbtasks:localtasks,
-          //   localtasks:localtasks
-          // }) 
+          localtasks.splice(i,1);
+          this.setState({
+            dbtasks:localtasks,
+            localtasks:localtasks
+          }) 
         }
         
     }
