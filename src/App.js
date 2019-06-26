@@ -34,10 +34,12 @@ class App extends React.Component{
       pomoNum:1,
       underGoTask:'',
       underGoPomo:'',
+      underGoId:'',
       email:'',
       name:'',
       UId:'',
       profURL:'',
+      counter:0,
       redirect:false
     }
     this.state.dbUsers=[]
@@ -47,7 +49,7 @@ class App extends React.Component{
       email:'',
       taskPomoNum:1,
       taskDate:Date.now(),
-      UId:''
+      _id:''
     }
     this.state.localtasks=[]
     this.state.dbtasks=[]
@@ -324,24 +326,25 @@ class App extends React.Component{
     // })
   }
   displayTodo=()=>{
-    return this.state.localtasks.map((elem,i)=><ListGroup id={"listgrp"+i}>
-      <ListGroup.Item id={"listelem"+i}><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(i,elem)}}>Start</Button></ListGroup.Item>
+    return this.state.localtasks.map((elem)=><ListGroup id={"listgrp"+elem._id}>
+      <ListGroup.Item id={"listelem"+elem._id} className="toDoList"><p>{elem.taskTitle}</p><p>{elem.taskPomoAsgn}</p><Button variant="outline-secondary" onClick={()=>{this.chooseTodo(elem)}}>Start</Button></ListGroup.Item>
     </ListGroup>)
   }
-  chooseTodo=(index,item)=>{
+  chooseTodo=(item)=>{
     console.log("it is here")
     console.log(item.taskTitle,":",item.taskPomoAsgn);
     this.setState({
       underGoTask:item.taskTitle,
-      underGoPomo:item.taskPomoAsgn
+      underGoPomo:item.taskPomoAsgn,
+      underGoId:item._id
     })  
     console.log("This is the chosen task",this.state.underGoTask,"with",this.state.underGoPomo)
   }
   pomodoroTask=()=>{
-    let index = this.state.underGoPomo
+    let index = this.state.underGoId
     let task = this.state.underGoTask
     return <ListGroup id={"listgrp"+index}>
-      <ListGroup.Item id={"listelem"+index}><p>{task}</p><p>{index}</p></ListGroup.Item>
+      <ListGroup.Item id={"listelem"+index}><p>{task}</p><p>{this.state.underGoPomo}</p></ListGroup.Item>
     </ListGroup>
   }
   
@@ -369,11 +372,17 @@ class App extends React.Component{
       tasks.taskPomoNum=pNum
       tasks.email = email;
       tasks.userName = userName;
-      tasks.UId = this.state.UId
+      let counter = this.state.counter;
+       counter=1;
+      counter+=1
+      this.setState({
+        counter:counter
+      })
+      tasks._id = 't00'+counter
       this.setState({
         tasks:tasks
       })
-      let localarr = {'taskTitle':this.state.taskEle,'taskDate':this.state.tasks.taskDate,'taskPomoAsgn':pNum};
+      let localarr = {'taskTitle':this.state.taskEle,'taskDate':this.state.tasks.taskDate,'taskPomoAsgn':pNum,'_id':this.state.tasks._id};
       let localtasks = this.state.localtasks
       let fl=0;
       for(let i=0;i<localtasks.length;i++){
