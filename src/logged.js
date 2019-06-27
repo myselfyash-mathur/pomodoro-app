@@ -14,7 +14,7 @@ function Logged({userName,checkLogin,profURL,timer,startTimer,isSnackbarActive,l
         <div className="demo-big-content">
             {checkLogin}
         <Router>
-            <Layout fixedDrawer={true} fixedHeader={true}>
+            <Layout fixedHeader={true}>
                 <Header title="Pomodorer's Point" scroll className='loggedNavHeader'>
                         <img className="profPicture" src={profURL} alt="UserProfPicture"></img>
                         <Button variant="danger" onClick={()=>logout()}>{userName}</Button>

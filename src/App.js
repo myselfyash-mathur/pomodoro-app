@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import {BrowserRouter as Router,Route,Switch,withRouter} from 'react-router-dom';
+import {Route,withRouter} from 'react-router-dom';
 import Home from './Home.js';
 import Logged from './logged.js';
 import { ListGroup,Button } from 'react-bootstrap';

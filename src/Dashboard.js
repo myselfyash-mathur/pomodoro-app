@@ -11,7 +11,7 @@ function Dashboard(){
             <Container>
                 <Row><h1>The Dashboard</h1></Row>
                 <Row>
-                    <Col><img src={pomodoro}/></Col>
+                    <Col><img src={pomodoro} alt="Pomodoro-Technique-Image"/></Col>
                     <Col><h1>What It Is??</h1><p>Over 2 million people have already used the Pomodoro Technique to transform their lives, making them more productive, more focused and even smarter.</p></Col>
                 </Row>
                 <Row>

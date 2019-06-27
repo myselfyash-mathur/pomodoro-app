@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navbar,Container,Row,Col,Form,Button} from 'react-bootstrap';
+import {Navbar,Container,Row,Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import GoogleLogin from './google.png';
 import {Footer,FooterSection,FooterLinkList,Card,CardText,CardActions} from 'react-mdl';

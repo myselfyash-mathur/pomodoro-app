@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Snackbar} from 'react-mdl';
-import {CircularProgressbar, buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
+import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import {Container,Row,Col,Button,InputGroup,FormControl} from 'react-bootstrap';
 import '../node_modules/react-bootstrap/dist/react-bootstrap.js';
