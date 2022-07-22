@@ -9,13 +9,13 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import bellSound from './bellRing.mp3';
 const firebaseConfig = {
-  apiKey: "AIzaSyAThLyqMPY10NBPd2TxYlCEHG2mbfvPLPg",
-  authDomain: "pomodoroapp-aae8f.firebaseapp.com",
-  databaseURL: "https://pomodoroapp-aae8f.firebaseio.com",
-  projectId: "pomodoroapp-aae8f",
-  storageBucket: "pomodoroapp-aae8f.appspot.com",
-  messagingSenderId: "591498991208",
-  appId: "1:591498991208:web:f19082d423f67bb0"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
